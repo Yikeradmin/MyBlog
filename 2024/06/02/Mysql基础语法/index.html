@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+
+
+<html theme="dark" showBanner="true" hasBanner="false" > 
+<link href="https://cdn.staticfile.org/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet">
+<link href="https://cdn.staticfile.org/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet">
+<link href="https://cdn.staticfile.org/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet">
+<script src="/js/color.global.min.js" ></script>
+<script src="/js/load-settings.js" ></script>
+<head>
+  <meta charset="utf-8">
+  
+  
+  
+
+  
+  <title>Mysql基础语法 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link rel="preload" href="/css/fonts/Roboto-Regular.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+  <link rel="preload" href="/css/fonts/Roboto-Bold.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+
+  <meta name="description" content="简单、开源、关系型数据库（在Java中显示的表示数据之间的关联关系，不要用Mysql自带的主键外键建立关系） SQL语句分类    名称 解释 命令    DDL 定义和管理数据对象 CREATE DROP ALTER   DML 操作数据对象中所包含的数据 INSERT UPDATE DELETE   DQL 查询数据 SELECT   DCL 管理数据库的语言，包括管理权限和更改数据 GRAN">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mysql基础语法">
+<meta property="og:url" content="http://example.com/2024/06/02/Mysql%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="简单、开源、关系型数据库（在Java中显示的表示数据之间的关联关系，不要用Mysql自带的主键外键建立关系） SQL语句分类    名称 解释 命令    DDL 定义和管理数据对象 CREATE DROP ALTER   DML 操作数据对象中所包含的数据 INSERT UPDATE DELETE   DQL 查询数据 SELECT   DCL 管理数据库的语言，包括管理权限和更改数据 GRAN">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2024-06-02T11:57:44.000Z">
+<meta property="article:modified_time" content="2024-06-02T12:43:38.687Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="Mysql">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-32.png" sizes="32x32">
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-128.png" sizes="128x128">
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-180.png" sizes="180x180">
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-192.png" sizes="192x192">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-32.png" sizes="32x32">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-128.png" sizes="128x128">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-180.png" sizes="180x180">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-192.png" sizes="192x192">
+  
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+
+<body>
+  
+   
+  <div id="main-grid" class="  ">
+    <div id="nav" class=""  >
+      <navbar id="navbar">
+  <nav id="title-nav">
+    <a href="/">
+      <div id="vivia-logo">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+      <div>Hexo </div>
+    </a>
+  </nav>
+  <nav id="main-nav">
+    
+      <a class="main-nav-link" href="/">Home</a>
+    
+      <a class="main-nav-link" href="/archives">Archives</a>
+    
+      <a class="main-nav-link" href="/about">About</a>
+    
+  </nav>
+  <nav id="sub-nav">
+    <a id="theme-btn" class="nav-icon">
+      <span class="light-mode-icon"><svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M438.5-829.913v-48q0-17.452 11.963-29.476 11.964-12.024 29.326-12.024 17.363 0 29.537 12.024t12.174 29.476v48q0 17.452-11.963 29.476-11.964 12.024-29.326 12.024-17.363 0-29.537-12.024T438.5-829.913Zm0 747.826v-48q0-17.452 11.963-29.476 11.964-12.024 29.326-12.024 17.363 0 29.537 12.024t12.174 29.476v48q0 17.452-11.963 29.476-11.964 12.024-29.326 12.024-17.363 0-29.537-12.024T438.5-82.087ZM877.913-438.5h-48q-17.452 0-29.476-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537t29.476-12.174h48q17.452 0 29.476 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T877.913-438.5Zm-747.826 0h-48q-17.452 0-29.476-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537T82.087-521.5h48q17.452 0 29.476 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T130.087-438.5Zm660.174-290.87-34.239 32q-12.913 12.674-29.565 12.174-16.653-.5-29.327-13.174-12.674-12.673-12.554-28.826.12-16.152 12.794-28.826l33-35q12.913-12.674 30.454-12.674t30.163 12.847q12.709 12.846 12.328 30.826-.38 17.98-13.054 30.653ZM262.63-203.978l-32 34q-12.913 12.674-30.454 12.674t-30.163-12.847q-12.709-12.846-12.328-30.826.38-17.98 13.054-30.653l33.239-31q12.913-12.674 29.565-12.174 16.653.5 29.327 13.174 12.674 12.673 12.554 28.826-.12 16.152-12.794 28.826Zm466.74 33.239-32-33.239q-12.674-12.913-12.174-29.565.5-16.653 13.174-29.327 12.673-12.674 28.826-13.054 16.152-.38 28.826 12.294l35 33q12.674 12.913 12.674 30.454t-12.847 30.163q-12.846 12.709-30.826 12.328-17.98-.38-30.653-13.054ZM203.978-697.37l-34-33q-12.674-12.913-13.174-29.945-.5-17.033 12.174-29.707t31.326-13.293q18.653-.62 31.326 13.054l32 34.239q11.674 12.913 11.174 29.565-.5 16.653-13.174 29.327-12.673 12.674-28.826 12.554-16.152-.12-28.826-12.794ZM480-240q-100 0-170-70t-70-170q0-100 70-170t170-70q100 0 170 70t70 170q0 100-70 170t-170 70Zm-.247-82q65.703 0 111.475-46.272Q637-414.544 637-480.247t-45.525-111.228Q545.95-637 480.247-637t-111.475 45.525Q323-545.95 323-480.247t45.525 111.975Q414.05-322 479.753-322ZM481-481Z"/></svg></span>
+      <span class="dark-mode-icon"><svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M480.239-116.413q-152.63 0-258.228-105.478Q116.413-327.37 116.413-480q0-130.935 77.739-227.435t206.304-125.043q43.022-9.631 63.87 10.869t3.478 62.805q-8.891 22.043-14.315 44.463-5.424 22.42-5.424 46.689 0 91.694 64.326 155.879 64.325 64.186 156.218 64.186 24.369 0 46.978-4.946 22.609-4.945 44.413-14.076 42.826-17.369 62.967 1.142 20.142 18.511 10.511 61.054Q807.174-280 712.63-198.206q-94.543 81.793-232.391 81.793Zm0-95q79.783 0 143.337-40.217 63.554-40.218 95.793-108.283-15.608 4.044-31.097 5.326-15.49 1.283-31.859.805-123.706-4.066-210.777-90.539-87.071-86.473-91.614-212.092-.24-16.369.923-31.978 1.164-15.609 5.446-30.978-67.826 32.478-108.282 96.152Q211.652-559.543 211.652-480q0 111.929 78.329 190.258 78.329 78.329 190.258 78.329ZM466.13-465.891Z"/></svg></span>
+    </a>
+    
+      <a id="nav-rss-link" class="nav-icon mobile-hide" href="/atom.xml" title="RSS Feed">
+        <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M198-120q-25.846 0-44.23-18.384-18.384-18.385-18.384-44.23 0-25.846 18.384-44.23 18.384-18.385 44.23-18.385 25.846 0 44.23 18.385 18.384 18.384 18.384 44.23 0 25.845-18.384 44.23Q223.846-120 198-120Zm538.385 0q-18.846 0-32.923-13.769-14.076-13.769-15.922-33.23-8.692-100.616-51.077-188.654-42.385-88.039-109.885-155.539-67.5-67.501-155.539-109.885Q283-663.462 182.385-672.154q-19.461-1.846-33.23-16.23-13.769-14.385-13.769-33.846t14.076-32.922q14.077-13.461 32.923-12.23 120.076 8.692 226.038 58.768 105.961 50.077 185.73 129.846 79.769 79.769 129.846 185.731 50.077 105.961 58.769 226.038 1.231 18.846-12.538 32.922Q756.461-120 736.385-120Zm-252 0q-18.231 0-32.423-13.461t-18.653-33.538Q418.155-264.23 348.886-333.5q-69.27-69.27-166.501-84.423-20.077-4.462-33.538-18.961-13.461-14.5-13.461-33.346 0-19.076 13.884-33.23 13.884-14.153 33.115-10.922 136.769 15.384 234.384 112.999 97.615 97.615 112.999 234.384 3.231 19.23-10.538 33.115Q505.461-120 484.385-120Z"/></svg>
+      </a>
+    
+    <div id="nav-menu-btn" class="nav-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M177.37-252.282q-17.453 0-29.477-11.964-12.024-11.963-12.024-29.326t12.024-29.537q12.024-12.174 29.477-12.174h605.26q17.453 0 29.477 11.964 12.024 11.963 12.024 29.326t-12.024 29.537q-12.024 12.174-29.477 12.174H177.37Zm0-186.218q-17.453 0-29.477-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537T177.37-521.5h605.26q17.453 0 29.477 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T782.63-438.5H177.37Zm0-186.217q-17.453 0-29.477-11.964-12.024-11.963-12.024-29.326t12.024-29.537q12.024-12.174 29.477-12.174h605.26q17.453 0 29.477 11.964 12.024 11.963 12.024 29.326t-12.024 29.537q-12.024 12.174-29.477 12.174H177.37Z"/></svg>
+    </div>
+  </nav>
+</navbar>
+<div id="nav-dropdown" class="hidden">
+  <div id="dropdown-link-list">
+    
+      <a class="nav-dropdown-link" href="/">Home</a>
+    
+      <a class="nav-dropdown-link" href="/archives">Archives</a>
+    
+      <a class="nav-dropdown-link" href="/about">About</a>
+    
+    
+      <a class="nav-dropdown-link" href="/atom.xml" title="RSS Feed">RSS</a>
+     
+    </div>
+</div>
+<script>
+  let dropdownBtn = document.getElementById("nav-menu-btn");
+  let dropdownEle = document.getElementById("nav-dropdown");
+  dropdownBtn.onclick = function() {
+    dropdownEle.classList.toggle("hidden");
+  }
+</script>
+    </div>
+    <div id="sidebar-wrapper">
+      <sidebar id="sidebar">
+  
+    <div class="widget-wrap">
+  <div class="info-card">
+    <div class="avatar">
+      
+        <image src=/img/avatar.jpg></image>
+      
+      <div class="img-dim"></div>
+    </div>
+    <div class="info">
+      <div class="username">NOTable CALM. </div>
+      <div class="dot"></div>
+      <div class="subtitle">See The Hole Word . </div>
+      <div class="link-list">
+        
+          <a class="link-btn" target="_blank" rel="noopener" href="https://twitter.com" title="Twitter"><i class="fa-brands fa-twitter"></i></a>
+        
+          <a class="link-btn" target="_blank" rel="noopener" href="https://store.steampowered.com" title="Steam"><i class="fa-brands fa-steam"></i></a>
+        
+          <a class="link-btn" target="_blank" rel="noopener" href="https://github.com" title="GitHub"><i class="fa-brands fa-github"></i></a>
+         
+      </div>  
+    </div>
+  </div>
+</div>
+
+  
+  <div class="sticky">
+    
+      
+
+
+
+    
+      
+  <div class="widget-wrap">
+    <div class="widget">
+      <h3 class="widget-title">Tags</h3>
+      <ul class="widget-tag-list" itemprop="keywords"><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Callable/" rel="tag">Callable</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/JDBC/" rel="tag">JDBC</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Lock%E9%94%81/" rel="tag">Lock锁</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Mysql/" rel="tag">Mysql</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Runnable/" rel="tag">Runnable</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Thread/" rel="tag">Thread</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/synchronized/" rel="tag">synchronized</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E4%BB%A3%E7%90%86/" rel="tag">代理</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" rel="tag">多线程</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5/" rel="tag">多线程同步</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E5%AE%88%E6%8A%A4%E7%BA%BF%E7%A8%8B/" rel="tag">守护线程</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E5%B9%B6%E5%8F%91%E9%97%AE%E9%A2%98/" rel="tag">并发问题</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E7%94%9F%E4%BA%A7%E8%80%85%E6%B6%88%E8%B4%B9%E8%80%85/" rel="tag">生产者消费者</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E7%BA%BF%E7%A8%8B%E6%B1%A0/" rel="tag">线程池</a></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget-wrap">
+    <div class="widget">
+      <h3 class="widget-title">Archives</h3>
+      
+      
+        <a class="archive-link" href="/archives/2024/06 ">
+          June 2024 
+          <div class="archive-count">13 </div>
+        </a>
+      
+        <a class="archive-link" href="/archives/2024/05 ">
+          May 2024 
+          <div class="archive-count">1 </div>
+        </a>
+      
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget-wrap">
+    <div class="widget">
+      <h3 class="widget-title">Recent Posts</h3>
+      <ul>
+        
+          <a class="recent-link" href="/2024/06/05/JDBC%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/" title="JDBC的基本使用" >
+            <div class="recent-link-text">
+              JDBC的基本使用
+            </div>
+          </a>
+        
+          <a class="recent-link" href="/2024/06/05/%E5%85%B3%E8%81%94%E6%9F%A5%E8%AF%A2/" title="关联查询" >
+            <div class="recent-link-text">
+              关联查询
+            </div>
+          </a>
+        
+          <a class="recent-link" href="/2024/06/05/%E8%A1%A8%E8%AE%BE%E8%AE%A1/" title="表设计" >
+            <div class="recent-link-text">
+              表设计
+            </div>
+          </a>
+        
+          <a class="recent-link" href="/2024/06/05/%E7%BA%A6%E6%9D%9F/" title="约束" >
+            <div class="recent-link-text">
+              约束
+            </div>
+          </a>
+        
+          <a class="recent-link" href="/2024/06/05/%E7%B4%A2%E5%BC%95/" title="索引" >
+            <div class="recent-link-text">
+              索引
+            </div>
+          </a>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+  </div>
+</sidebar>
+    </div>
+    <div id="content-body">
+       
+
+
+<article id="post-Mysql基础语法" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+    
+   
+  <div class="article-inner">
+    <div class="article-main">
+      <header class="article-header">
+        
+<div class="main-title-bar">
+  <div class="main-title-dot"></div>
+  
+    
+      <h1 class="p-name article-title" itemprop="headline name">
+        Mysql基础语法
+      </h1>
+    
+  
+</div>
+
+        <div class='meta-info-bar'>
+          <div class="meta-info">
+  <time class="dt-published" datetime="2024-06-02T11:57:44.000Z" itemprop="datePublished">2024-06-02</time>
+</div>
+          <div class="need-seperator meta-info">
+            <div class="meta-cate-flex">
+  
+    Uncategorized 
+   
+</div>
+  
+          </div>
+          <div class="wordcount need-seperator meta-info">
+            2.6k words 
+          </div>
+        </div>
+        
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Mysql/" rel="tag">Mysql</a></li></ul>
+
+      </header>
+      <div class="e-content article-entry" itemprop="articleBody">
+        
+          <p>简单、开源、关系型数据库（在Java中显示的表示数据之间的关联关系，不要用Mysql自带的主键外键建立关系）</p>
+<p>SQL语句分类</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>解释</th>
+<th>命令</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>DDL</td>
+<td>定义和管理数据对象</td>
+<td>CREATE DROP ALTER</td>
+</tr>
+<tr>
+<td>DML</td>
+<td>操作数据对象中所包含的数据</td>
+<td>INSERT UPDATE DELETE</td>
+</tr>
+<tr>
+<td>DQL</td>
+<td>查询数据</td>
+<td>SELECT</td>
+</tr>
+<tr>
+<td>DCL</td>
+<td>管理数据库的语言，包括管理权限和更改数据</td>
+<td>GRANT  COMMIT ROLLBACK</td>
+</tr>
+</tbody></table>
+<h2 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h2><h3 id="数值类型"><a href="#数值类型" class="headerlink" title="数值类型"></a>数值类型</h3><table>
+<thead>
+<tr>
+<th>类型</th>
+<th>说明</th>
+<th>取值范围</th>
+<th>存储需求</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>tinyint</td>
+<td>非常小的数据</td>
+<td>有符值：-2^7<del>2^7-1<br />无符值：0</del>2^8-1</td>
+<td>1字节</td>
+</tr>
+<tr>
+<td>smallint</td>
+<td>较小的数据</td>
+<td>有符值：-2^15<del>2^15-1<br />无符值：0</del>2^16-1</td>
+<td>2字节</td>
+</tr>
+<tr>
+<td>mediumint</td>
+<td>中等大小的数据</td>
+<td>有符值：-2^23<del>2^23-1<br />无符值：0</del>2^24-1</td>
+<td>3字节</td>
+</tr>
+<tr>
+<td></td>
+<td>标准整数</td>
+<td>有符值：-2^31<del>2^31-1<br />无符值：0</del>2^32-1</td>
+<td>4字节</td>
+</tr>
+<tr>
+<td>bigint</td>
+<td>较大的整数</td>
+<td>有符值：-2^63<del>2^63-1<br />无符值：0</del>2^64-1</td>
+<td>8字节</td>
+</tr>
+<tr>
+<td>float</td>
+<td>单精度浮点数</td>
+<td>有符值：±1.1754351e -38</td>
+<td>4字节</td>
+</tr>
+<tr>
+<td>decimal</td>
+<td>字符串型的浮点数</td>
+<td>decimal(m,d)</td>
+<td>m个字节</td>
+</tr>
+</tbody></table>
+<h3 id="字符串类型"><a href="#字符串类型" class="headerlink" title="字符串类型"></a>字符串类型</h3><table>
+<thead>
+<tr>
+<th>类型</th>
+<th>说明</th>
+<th>最大长度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>char[(M)]</td>
+<td>()&lt;&#x3D;M&lt;&#x3D;255</td>
+<td>M字符</td>
+</tr>
+<tr>
+<td>varchar[(M)]</td>
+<td>可变字符串<br />()&lt;&#x3D;M&lt;&#x3D;65535</td>
+<td>变长度</td>
+</tr>
+<tr>
+<td>tinytext</td>
+<td>微小型文本串</td>
+<td>2^8-1字节</td>
+</tr>
+<tr>
+<td>text</td>
+<td>文本串</td>
+<td>2^16-1字节</td>
+</tr>
+</tbody></table>
+<h3 id="日期和时间数据类型"><a href="#日期和时间数据类型" class="headerlink" title="日期和时间数据类型"></a>日期和时间数据类型</h3><table>
+<thead>
+<tr>
+<th>类型</th>
+<th>说明</th>
+<th>取值范围</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>DATE</td>
+<td>YYYY-MM-DD日期格式</td>
+<td>1000-01-01~9999-12-31</td>
+</tr>
+<tr>
+<td>TIME</td>
+<td>Hh:mm:ss时间格式</td>
+<td>-838:59:59~838:59:59</td>
+</tr>
+<tr>
+<td>DATETIME</td>
+<td>YYYY-MM-DDhh:mm:ss</td>
+<td>1000-01-0100:00:00至9999-12-3123:59:59</td>
+</tr>
+<tr>
+<td>TIMESTAMP</td>
+<td>YYYYMMDDhhmmss时间戳</td>
+<td>1970010101000000~2037年的某个时间时刻</td>
+</tr>
+<tr>
+<td>YEAR</td>
+<td>YYYY格式的年份值</td>
+<td>1901~2155</td>
+</tr>
+</tbody></table>
+<h2 id="创建和删除数据库"><a href="#创建和删除数据库" class="headerlink" title="创建和删除数据库"></a>创建和删除数据库</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> DATABASE [数据库名称]; #创建数据库</span><br><span class="line"><span class="keyword">DROP</span> DATABASE root; #删除数据库</span><br><span class="line"><span class="keyword">SHOW</span> DATABASE; #查看数据库</span><br></pre></td></tr></table></figure>
+
+<h2 id="创建表"><a href="#创建表" class="headerlink" title="创建表"></a>创建表</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> [表名](</span><br><span class="line">	字段名 类型名,</span><br><span class="line">    ... ...</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>案例</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> student(</span><br><span class="line">	id <span class="type">INT</span>, <span class="comment">-- 学号</span></span><br><span class="line">    name <span class="type">VARCHAR</span>(<span class="number">10</span>),<span class="comment">-- 姓名</span></span><br><span class="line">    age <span class="type">INT</span>, <span class="comment">-- 年龄</span></span><br><span class="line">    gender <span class="type">CHAR</span>(<span class="number">1</span>) <span class="comment">-- 性别</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<h2 id="插入数据"><a href="#插入数据" class="headerlink" title="插入数据"></a>插入数据</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> student(id,name) <span class="keyword">VALUES</span>(<span class="number">1001</span>,<span class="string">&#x27;张三&#x27;</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> student(id,name,age) <span class="keyword">VALUES</span>(<span class="number">1001</span>,<span class="string">&#x27;张三&#x27;</span>,<span class="number">18</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> student(id,name,age,gender)</span><br><span class="line"><span class="keyword">VALUES</span>  (<span class="number">1001</span>,<span class="string">&#x27;张三&#x27;</span>,<span class="number">18</span>,<span class="string">&#x27;女&#x27;</span>),</span><br><span class="line">        (<span class="number">1001</span>,<span class="string">&#x27;张三&#x27;</span>,<span class="number">18</span>,<span class="string">&#x27;女&#x27;</span>),</span><br><span class="line">        (<span class="number">1001</span>,<span class="string">&#x27;张三&#x27;</span>,<span class="number">18</span>,<span class="string">&#x27;女&#x27;</span>),  </span><br><span class="line">        (<span class="number">1001</span>,<span class="string">&#x27;张三&#x27;</span>,<span class="number">18</span>,<span class="string">&#x27;女&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<h2 id="主键"><a href="#主键" class="headerlink" title="主键"></a>主键</h2><p>唯一标识，不能重复，不允许为空</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="keyword">user</span>(</span><br><span class="line">	user_id <span class="type">INT</span> <span class="keyword">PRIMARY</span> KEY AUTO_INCREMENT, <span class="comment">-- 指定一个自增列作为主键</span></span><br><span class="line">    username <span class="type">VARCHAR</span>(<span class="number">32</span>) <span class="keyword">NOT</span> <span class="keyword">null</span> , <span class="comment">-- 表示不能为空</span></span><br><span class="line">    email <span class="type">VARCHAR</span>(<span class="number">128</span>) <span class="keyword">DEFAULT</span> <span class="string">&#x27;123456@qq.com&#x27;</span>, <span class="comment">-- 设置默认值</span></span><br><span class="line">    login_time DATETIME, <span class="comment">-- 最后登录时间</span></span><br><span class="line">    phone <span class="type">VARCHAR</span>(<span class="number">20</span>) <span class="comment">-- 手机号，可以为空</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<h2 id="删除表"><a href="#删除表" class="headerlink" title="删除表"></a>删除表</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">DELETE</span> <span class="keyword">FROM</span> [表名] # 只删除表中所有数据，表还在</span><br><span class="line"><span class="keyword">DROP</span> <span class="keyword">TABLE</span> [表名] # 删除整个表结构，表不在了</span><br></pre></td></tr></table></figure>
+
+<h2 id="修改表"><a href="#修改表" class="headerlink" title="修改表"></a>修改表</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 1. 修改表名</span></span><br><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> student_example <span class="keyword">AS</span> student;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 2. 添加字段(列)</span></span><br><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> student <span class="keyword">ADD</span> email <span class="type">VARCHAR</span>(<span class="number">20</span>); <span class="comment">-- 新增邮箱列</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 3. 修改字段</span></span><br><span class="line"><span class="comment">-- 修改字段类型( 1.修改的列没有值  2.当前列值和修改后的值相匹配)</span></span><br><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> student MODIFY email <span class="type">INT</span>;</span><br><span class="line"><span class="comment">-- 修改字段名</span></span><br><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> student CHANGE email address <span class="type">VARCHAR</span>(<span class="number">50</span>);</span><br><span class="line"><span class="comment">-- 删除某个字段</span></span><br><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> student <span class="keyword">DROP</span> address_example</span><br></pre></td></tr></table></figure>
+
+<h2 id="查询"><a href="#查询" class="headerlink" title="查询"></a>查询</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 查询数据</span></span><br><span class="line"><span class="keyword">SELECT</span> user_id,username,us_password,email <span class="keyword">FROM</span> <span class="keyword">user</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 通配符查询所有字段</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> <span class="keyword">user</span>;</span><br></pre></td></tr></table></figure>
+
+<h2 id="修改"><a href="#修改" class="headerlink" title="修改"></a>修改</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 修改数据</span></span><br><span class="line"><span class="keyword">UPDATE</span> <span class="keyword">user</span> <span class="keyword">SET</span> phone <span class="operator">=</span> <span class="string">&#x27;12121211&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">UPDATE</span> <span class="keyword">user</span> <span class="keyword">SET</span> phone <span class="operator">=</span> <span class="string">&#x27;123456&#x27;</span> <span class="keyword">WHERE</span> user_id <span class="operator">=</span> <span class="number">1</span>; <span class="comment">-- 只修改user_id的值为1的列</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">UPDATE</span> <span class="keyword">user</span> <span class="keyword">SET</span> login_time <span class="operator">=</span> NOW(), phone <span class="operator">=</span> <span class="string">&#x27;654321&#x27;</span> <span class="keyword">WHERE</span> user_id <span class="operator">=</span> <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">UPDATE</span> <span class="keyword">user</span> <span class="keyword">SET</span> user_id <span class="operator">=</span> <span class="number">1001</span> <span class="keyword">WHERE</span> username <span class="operator">=</span> <span class="string">&#x27;张三&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<h2 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">DELETE</span> <span class="keyword">FROM</span> <span class="keyword">user</span> <span class="keyword">WHERE</span> user_id <span class="operator">=</span> <span class="number">1002</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> <span class="keyword">user</span>(username,password,email) <span class="keyword">VALUES</span>(<span class="string">&#x27;张三&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="string">&#x27;2549455880@qq.com&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">TRUNCATE</span> <span class="keyword">TABLE</span> <span class="keyword">user</span>;<span class="comment">-- 不能和where语句搭配使用，只能删除所有数据，会重置自增值从头开始</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Where条件子句"><a href="#Where条件子句" class="headerlink" title="Where条件子句"></a>Where条件子句</h2><p>运算符</p>
+<table>
+<thead>
+<tr>
+<th>运算符</th>
+<th>含义</th>
+<th>范围</th>
+<th>结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>&#x3D;</td>
+<td>等于</td>
+<td>5&#x3D;6</td>
+<td>false</td>
+</tr>
+<tr>
+<td>&lt;&gt;或!&#x3D;</td>
+<td>不等于</td>
+<td>5&lt;&gt;6</td>
+<td>true</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+
+        
+      </div>
+
+         
+    </div>
+    
+     
+  </div>
+  
+    
+<nav id="article-nav">
+  <a class="article-nav-btn left "
+    
+      href="/2024/06/05/%E7%B4%A2%E5%BC%95/"
+      title="索引"
+     >
+    <i class="fa-solid fa-angle-left"></i>
+    <p class="title-text">
+      
+        索引
+        
+    </p>
+  </a>
+  <a class="article-nav-btn right "
+    
+      href="/2024/06/02/%E5%AE%88%E6%8A%A4%E7%BA%BF%E7%A8%8B/"
+      title="守护线程"
+     >
+
+    <p class="title-text">
+      
+        守护线程
+        
+    </p>
+    <i class="fa-solid fa-angle-right"></i>
+  </a>
+</nav>
+
+
+  
+</article>
+
+
+
+
+
+
+    </div>
+    <div id="footer-wrapper">
+      <footer id="footer">
+  
+  <div id="footer-info" class="inner">
+    
+    &copy; 2024 NOTable CALM.<br>
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> & Theme <a target="_blank" rel="noopener" href="https://github.com/saicaca/hexo-theme-vivia">Vivia</a>
+  </div>
+</footer>
+
+    </div>
+    <div class="back-to-top-wrapper">
+    <button id="back-to-top-btn" class="back-to-top-btn hide" onclick="topFunction()">
+        <i class="fa-solid fa-angle-up"></i>
+    </button>
+</div>
+
+<script>
+    function topFunction() {
+        window.scroll({ top: 0, behavior: 'smooth' });
+    }
+    let btn = document.getElementById('back-to-top-btn');
+    function scrollFunction() {
+        if (document.body.scrollTop > 600 || document.documentElement.scrollTop > 600) {
+            btn.classList.remove('hide')
+        } else {
+            btn.classList.add('hide')
+        }
+    }
+    window.onscroll = function() {
+        scrollFunction();
+    }
+</script>
+
+  </div>
+  <script src="/js/light-dark-switch.js"></script>
+</body>
+</html>
